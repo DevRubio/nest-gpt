@@ -1,10 +1,9 @@
 import * as path from "path"
 import * as fs from 'fs'
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { audioToTextUseCase, imageGenerationUseCase, imageVariationUseCase, orthographyCheckUseCase, prosConsDiscusserStreamUseCase, prosConsDiscusserUseCase, textToAudioUseCase, translatorUseCase } from './use-cases';
-import { AudioToTextDto, ImageGenerationDto, ImageVariationDto, OrthographyDto, ProsConsDiscusserDto, TextToAudioDto } from './dtos';
+import { audioToTextUseCase, imageDescriptionUseCase, imageGenerationUseCase, imageVariationUseCase, orthographyCheckUseCase, prosConsDiscusserStreamUseCase, prosConsDiscusserUseCase, textToAudioUseCase, translatorUseCase } from './use-cases';
+import { ImageGenerationDto, ImageVariationDto, OrthographyDto, ProsConsDiscusserDto, TextToAudioDto, TranslatorDto } from './dtos';
 import OpenAI from 'openai';
-import { TranslatorDto } from './dtos/translator.dto';
 
 @Injectable()
 export class GptService {
@@ -68,6 +67,10 @@ export class GptService {
 
     async generateImageVariation({baseImage}: ImageVariationDto){
         return imageVariationUseCase(this.openai,{baseImage})
+    }
+
+    async imageDescription(imageFile: Express.Multer.File, prompt: string) {
+        return await imageDescriptionUseCase(this.openai, { imageFile, prompt });
     }
 
 }
